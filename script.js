@@ -164,7 +164,7 @@ function updatePlayhead() {
 }
 
 
-let isPlaying = false;
+
 
 function playFrom(offset) {
   if (isPlaying) return;
