@@ -26,7 +26,7 @@
     ];
 const ctx = new (window.AudioContext || window.webkitAudioContext)();
 let buffers = [], sources = [], gains = [], analysers = [], peakHolds = [], soloStates = [], startTime = null;
-let isMuted = true, duration = 60, loopStart = 0, loopEnd = 60;
+let isMuted = false, duration = 60, loopStart = 0, loopEnd = 60;
 let isLooping = false;
 let isPlaying = false;
 
@@ -115,6 +115,30 @@ function updateSolo() {
     const active = anySolo ? soloStates[i] : true;
     gain.gain.value = isMuted ? 0 : (active ? 1 : 0);
   });
+}
+function drawAmplitude() {
+  const canvas = document.getElementById("amplitudeGraph");
+  const ctx2d = canvas.getContext("2d");
+  ctx2d.clearRect(0, 0, canvas.width, canvas.height);
+
+  if (!buffers[0]) return; // Use first buffer as example
+
+  const data = buffers[0].getChannelData(0); // mono or left channel
+  const step = Math.floor(data.length / canvas.width);
+  const amp = canvas.height / 2;
+
+  ctx2d.beginPath();
+  ctx2d.moveTo(0, amp);
+
+  for (let i = 0; i < canvas.width; i++) {
+    const min = data[i * step];
+    const y = amp - min * amp;
+    ctx2d.lineTo(i, y);
+  }
+
+  ctx2d.strokeStyle = "#0f0";
+  ctx2d.lineWidth = 1;
+  ctx2d.stroke();
 }
 
 function updateMeters() {
