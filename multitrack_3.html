@@ -6,6 +6,7 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+   <canvas id="amplitudeGraph" width="100%" height="1"></canvas>
   <div id="controls">
     <button id="load">Load</button>
     <button id="play">Play</button>
@@ -15,12 +16,12 @@
   </div>
 
   <div id="loading">Loading: 0 / 24 files</div>
-  <div id="playhead">Playhead: 0.00s</div>
+  
 
   <div id="loop-controls">
-    <canvas id="amplitudeGraph" width="100%" height="1"></canvas>
-    <label>Start: <input type="range" id="sliderA" min="0" max="60" step="0.1" value="0" style="width: 100%;"></label><br>
-    <label>Time: <input type="range" id="playheadSlider" min="0" max="60" step="0.01" value="0" style="width: 100%;"></label><br>
+   
+    <label>Start:<br> <input type="range" id="sliderA" min="0" max="60" step="0.1" value="0" style="width: 100%;"></label>
+    <div id="playhead">Playhead: 0.00s</div> <input type="range" id="playheadSlider" min="0" max="60" step="0.01" value="0" style="width: 100%;"><br>
     <label>Stop:: <input type="range" id="sliderB" min="0" max="60" step="0.1" value="60" style="width: 100%;"></label>
   </div>
 
