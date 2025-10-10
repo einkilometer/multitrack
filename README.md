@@ -3,4 +3,7 @@
 A browser-based audio player for microphone pattern analysis.  
 Features solo/mute logic, playhead timer, and visual indicators.
 
+
 Hosted via GitHub Pages.
+https://hfkbremen.sharepoint.com/sites/audiolab/Freigegebene%20Dokumente/multitrack_2.html
+https://hfkbremen.sharepoint.com/sites/audiolab/Freigegebene%20Dokumente/multitrack_3.html
