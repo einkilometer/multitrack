@@ -28,6 +28,7 @@ const ctx = new (window.AudioContext || window.webkitAudioContext)();
 let buffers = [], sources = [], gains = [], analysers = [], peakHolds = [], soloStates = [], startTime = null;
 let isMuted = true, duration = 60, loopStart = 0, loopEnd = 60;
 let isLooping = false;
+let isPlaying = false;
 
 
 document.getElementById("sliderA").oninput = e => {
@@ -158,14 +159,17 @@ function updatePlayhead() {
 }
 
 
+let isPlaying = false;
+
 function playFrom(offset) {
+  if (isPlaying) return;
+  isPlaying = true;
   startTime = ctx.currentTime - offset;
   sources = []; gains = []; analysers = [];
 
   buffers.forEach((buf, i) => {
     const src = ctx.createBufferSource();
     src.buffer = buf;
-
     const gain = ctx.createGain();
     const analyser = ctx.createAnalyser();
     analyser.fftSize = 256;
@@ -178,9 +182,19 @@ function playFrom(offset) {
     analysers[i] = analyser;
   });
 
-  updateSolo();      // wendet Solo/Mute-Logik an
-  updateMeters();    // startet die Anzeige der Pegel und Playhead
+  updateSolo();
+  updateMeters();
 }
+
+function stopAll() {
+  sources.forEach(src => {
+    try { src.stop(); } catch {}
+  });
+  sources = [];
+  startTime = null;
+  isPlaying = false;
+}
+
 async function playAll() {
   if (buffers.length === 0) {
     await loadFiles();
@@ -193,16 +207,38 @@ async function playAll() {
   }
   playFrom(loopStart);
 }
-function stopAll() { sources.forEach(src => { try { src.stop(); } catch {} }); 
-sources = []; 
-startTime = null;
- } 
-function muteAll() { gains.forEach(g => g.gain.value = 0); 
-isMuted = true; 
-} 
-function unmuteAll() { gains.forEach(g => g.gain.value = 1); 
-isMuted = false; 
-} 
+/*
+function stopAll() {
+  sources.forEach(src => {
+    if (src && typeof src.stop === "function") {
+      try { src.stop(); } catch (e) { console.warn("Already stopped:", e); }
+    }
+  });
+  sources = [];
+  startTime = null;
+}
+*/
+function muteAll() {
+  isMuted = true;
+  updateSolo();
+}
+
+function unmuteAll() {
+  isMuted = false;
+  updateSolo();
+}
+
+function updateSolo() {
+  const anySolo = soloStates.includes(true);
+  gains.forEach((gain, i) => {
+    if (!gain) return;
+    const active = anySolo ? soloStates[i] : true;
+    gain.gain.value = isMuted ? 0 : (active ? 1 : 0);
+  });
+}
+
+
+
 document.getElementById("play").addEventListener("click", playAll); 
 document.getElementById("stop").addEventListener("click", stopAll); 
 document.getElementById("mute").addEventListener("click", muteAll); 
