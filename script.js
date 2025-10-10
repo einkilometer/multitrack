@@ -51,22 +51,22 @@ async function loadFiles() {
   buffers = [];
   let loadedCount = 0;
 
-  audioFiles.forEach(async (track, i) => {
-  try {
-    const response = await fetch(track.url);
-    const arrayBuffer = await response.arrayBuffer();
-    const audioBuffer = await ctx.decodeAudioData(arrayBuffer);
+ const promises = audioFiles.map(async (track, i) => {
+    try {
+      const response = await fetch(track.url);
+      const arrayBuffer = await response.arrayBuffer();
+      const audioBuffer = await ctx.decodeAudioData(arrayBuffer);
+      buffers[i] = audioBuffer;
+      if (!gains[i]) gains[i] = ctx.createGain();
+      loadedCount++;
+      loadingDisplay.textContent = `Loading: ${loadedCount} / ${audioFiles.length} files`;
+    } catch (err) {
+      loadingDisplay.textContent = `❌ Error loading: ${track.name}`;
+      console.error(`Failed to load ${track.name}`, err);
+    }
+  });
 
-    buffers[i] = audioBuffer;
-    if (!gains[i]) gains[i] = ctx.createGain();
-
-    loadedCount++;
-    document.getElementById("loading").textContent = `Loading: ${loadedCount} / ${audioFiles.length} files`;
-  } catch (err) {
-    document.getElementById("loading").textContent = `❌ Error loading: ${track.name}`;
-    console.error(`Failed to load ${track.name}`, err);
-  }
-});
+  await Promise.all(promises); // ✅ Wait until all are loaded
 
   
 
