@@ -39,12 +39,35 @@
 </head>
 <body>
   <h2>Multitrack Player – Microphone Patterns</h2>
+  <div id="loading">Loading: 0 / 24 files</div>
+
   <button id="play">Play All</button>
   <button id="reset">Reset Solo</button>
   <div id="playhead">Playhead: 0.00s</div>
   <div id="mixer"></div>
 
   <script>
+    async function loadFiles() {
+  const loadingDisplay = document.getElementById("loading");
+  let loadedCount = 0;
+
+  for (let track of audioFiles) {
+    try {
+      const response = await fetch(track.url);
+      const arrayBuffer = await response.arrayBuffer();
+      const audioBuffer = await ctx.decodeAudioData(arrayBuffer);
+      buffers.push(audioBuffer);
+      loadedCount++;
+      loadingDisplay.textContent = `Loading: ${loadedCount} / ${audioFiles.length} files`;
+    } catch (err) {
+      loadingDisplay.textContent = `Error loading: ${track.name}`;
+      console.error(`Failed to load ${track.name}`, err);
+    }
+  }
+
+  loadingDisplay.textContent = `✅ All ${loadedCount} files loaded`;
+}
+
     const audioFiles = [
       { name: "01-1 Rohde NT1", url: "01-1 Rohde NT1.mp3" },
       { name: "02-2 Austrain Audio OC 818", url: "02-2 Austrain Audio OC 818.mp3" },
