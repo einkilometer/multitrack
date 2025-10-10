@@ -178,7 +178,7 @@ function updateMeters() {
 function updatePlayhead() {
   if (!startTime) return;
   const elapsed = ctx.currentTime - startTime;
-    const elapsed = ctx.currentTime - startTime;
+
   document.getElementById("playheadSlider").value = elapsed.toFixed(2);
   document.getElementById("playhead").textContent = `Playhead: ${elapsed.toFixed(2)}s`;
 
