@@ -26,7 +26,7 @@
     ];
 const ctx = new (window.AudioContext || window.webkitAudioContext)();
 let buffers = [], sources = [], gains = [], analysers = [], peakHolds = [], soloStates = [], startTime = null;
-let isMuted = false, duration = 60, loopStart = 0, loopEnd = 60;
+let isMuted = true, duration = 60, loopStart = 0, loopEnd = 60;
 let isLooping = false;
 let isPlaying = false;
 
@@ -78,6 +78,7 @@ async function loadFiles() {
 
   loadingDisplay.textContent = `✅ All ${loadedCount} files loaded`;
   createUI();
+    drawAmplitude();
 }
 
 function createUI() {
@@ -175,6 +176,7 @@ function updatePlayhead() {
   const playheadLine = document.getElementById("playhead-line");
   const canvas = document.getElementById("amplitudeGraph");
   const percent = elapsed / duration;
+  const canvasWidth = canvas.width || canvas.getBoundingClientRect().width;
   playheadLine.style.left = `${percent * canvas.width}px`;
 
   if (elapsed >= loopEnd && !isLooping) {
