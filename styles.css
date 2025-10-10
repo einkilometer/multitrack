@@ -1,0 +1,71 @@
+body {
+  font-family: sans-serif;
+  background: #111;
+  color: #eee;
+  margin: 0;
+  padding: 10px;
+}
+#controls {
+  margin-bottom: 10px;
+}
+button {
+  margin-right: 6px;
+  padding: 6px 10px;
+  font-size: 14px;
+}
+#loading, #playhead {
+  margin: 10px 0;
+  font-weight: bold;
+}
+.track {
+  display: flex;
+  align-items: center;
+  height: 24px;
+  margin-bottom: 2px;
+  background: #222;
+  padding: 2px 6px;
+  font-size: 12px;
+}
+.track-name {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.meter {
+  width: 100px;
+  height: 8px;
+  background: #444;
+  margin-left: 10px;
+  position: relative;
+}
+.meter-fill {
+  height: 100%;
+  background: limegreen;
+}
+.peak-hold {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 2px;
+  background: red;
+}
+.solo-btn.active {
+  background: #4caf50;
+  color: white;
+}
+#loop-controls {
+  margin: 20px 0;
+}
+#amplitudeGraph {
+  display: block;
+  background: #222;
+}
+#playhead-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: red;
+  left: 0;
+}
