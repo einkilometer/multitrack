@@ -26,7 +26,7 @@
     ];
 const ctx = new (window.AudioContext || window.webkitAudioContext)();
 let buffers = [], sources = [], gains = [], analysers = [], peakHolds = [], soloStates = [], startTime = null;
-let isMuted = true, duration = 60, loopStart = 0, loopEnd = 60;
+let isMuted = false, duration = 60, loopStart = 0, loopEnd = 60;
 let isLooping = false;
 let isPlaying = false;
 
