@@ -2,72 +2,78 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Multitrack Player</title>
+  <title>Multitrack Monitor</title>
   <style>
     body {
       font-family: sans-serif;
-      background: #f4f4f4;
-      padding: 20px;
+      background: #111;
+      color: #eee;
+      margin: 0;
+      padding: 10px;
+    }
+    #controls {
+      margin-bottom: 10px;
     }
     button {
-      margin: 5px;
-      padding: 8px 12px;
+      margin-right: 6px;
+      padding: 6px 10px;
       font-size: 14px;
     }
-    .track {
-      background: #fff;
-      border: 1px solid #ccc;
-      padding: 10px;
-      margin-bottom: 8px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .solo.active {
-      background-color: #4caf50;
-      color: white;
-    }
-    .status {
-      font-size: 18px;
-      margin-left: 10px;
+    #loading {
+      margin: 10px 0;
+      font-weight: bold;
     }
     #playhead {
       margin: 10px 0;
-      font-weight: bold;
+      font-size: 16px;
+    }
+    .track {
+      display: flex;
+      align-items: center;
+      height: 24px;
+      margin-bottom: 2px;
+      background: #222;
+      padding: 2px 6px;
+      font-size: 12px;
+    }
+    .track-name {
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .meter {
+      width: 100px;
+      height: 8px;
+      background: #444;
+      margin-left: 10px;
+      position: relative;
+    }
+    .meter-fill {
+      height: 100%;
+      background: limegreen;
+    }
+    .peak-hold {
+      position: absolute;
+      top: 0;
+      height: 100%;
+      width: 2px;
+      background: red;
     }
   </style>
 </head>
 <body>
-  <h2>Multitrack Player – Microphone Patterns</h2>
+  <div id="controls">
+    <button id="play">Play</button>
+    <button id="stop">Stop</button>
+    <button id="mute">Mute All</button>
+    <button id="unmute">Unmute All</button>
+  </div>
   <div id="loading">Loading: 0 / 24 files</div>
-
-  <button id="play">Play All</button>
-  <button id="reset">Reset Solo</button>
   <div id="playhead">Playhead: 0.00s</div>
-  <div id="mixer"></div>
+  <div id="tracks"></div>
 
   <script>
-    async function loadFiles() {
-  const loadingDisplay = document.getElementById("loading");
-  let loadedCount = 0;
-
-  for (let track of audioFiles) {
-    try {
-      const response = await fetch(track.url);
-      const arrayBuffer = await response.arrayBuffer();
-      const audioBuffer = await ctx.decodeAudioData(arrayBuffer);
-      buffers.push(audioBuffer);
-      loadedCount++;
-      loadingDisplay.textContent = `Loading: ${loadedCount} / ${audioFiles.length} files`;
-    } catch (err) {
-      loadingDisplay.textContent = `Error loading: ${track.name}`;
-      console.error(`Failed to load ${track.name}`, err);
-    }
-  }
-
-  loadingDisplay.textContent = `✅ All ${loadedCount} files loaded`;
-}
-
     const audioFiles = [
       { name: "01-1 Rohde NT1", url: "01-1 Rohde NT1.mp3" },
       { name: "02-2 Austrain Audio OC 818", url: "02-2 Austrain Audio OC 818.mp3" },
@@ -90,89 +96,130 @@
       { name: "19-tascam DR-40X Left Richtwirkung", url: "19-tascam DR-40X Kanäle Richtwirkung.mp3" },
       { name: "20-tascam DR-40X Right Richtwirkung", url: "20-tascam DR-40X Kanäle Richtwirkung.mp3" },
       { name: "21-MS zoom H2n Mid Richtwirkung", url: "21-MS zoom H2n Kanäle Richtwirkung.mp3" },
-      { name: "22-MS zoom H2n Side Richtwirkung", url: "22-MS zoom H2n Kanäle Richtwirkung.mp3" },
+      { name: "22-MS zoom H2n Right Richtwirkung", url: "22-MS zoom H2n Kanäle Richtwirkung.mp3" },
       { name: "23-XY zoom H2n Kanäle Richtwirkung", url: "23-XY zoom H2n Kanäle Richtwirkung.mp3" },
       { name: "24-XY zoom H2n Kanäle Richtwirkung", url: "24-XY zoom H2n Kanäle Richtwirkung.mp3" }
     ];
-
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    let buffers = [], sources = [], gains = [], soloStates = new Array(audioFiles.length).fill(false);
-    let startTime = null;
+    let buffers = [], sources = [], gains = [], analysers = [], peakHolds = [], soloStates = [], startTime = null;
+    let isMuted = false;
 
     async function loadFiles() {
+      const loadingDisplay = document.getElementById("loading");
+      let loadedCount = 0;
+
       for (let track of audioFiles) {
-        const response = await fetch(track.url);
-        const arrayBuffer = await response.arrayBuffer();
-        const audioBuffer = await ctx.decodeAudioData(arrayBuffer);
-        buffers.push(audioBuffer);
+        try {
+          const response = await fetch(track.url);
+          const arrayBuffer = await response.arrayBuffer();
+          const audioBuffer = await ctx.decodeAudioData(arrayBuffer);
+          buffers.push(audioBuffer);
+          loadedCount++;
+          loadingDisplay.textContent = `Loading: ${loadedCount} / ${audioFiles.length} files`;
+        } catch (err) {
+          loadingDisplay.textContent = `Error loading: ${track.name}`;
+          console.error(`Failed to load ${track.name}`, err);
+        }
       }
+
+      loadingDisplay.textContent = `✅ All ${loadedCount} files loaded`;
     }
 
     function createUI() {
-      const container = document.getElementById("mixer");
+      const container = document.getElementById("tracks");
       container.innerHTML = "";
       audioFiles.forEach((track, i) => {
         const div = document.createElement("div");
         div.className = "track";
         div.innerHTML = `
-          <strong>${track.name}</strong>
-          <button data-index="${i}" class="solo">Solo</button>
-          <span class="status" id="status-${i}">🔇</span>
+          <div class="track-name">${track.name}</div>
+          <div class="meter" id="meter-${i}">
+            <div class="meter-fill" id="fill-${i}"></div>
+            <div class="peak-hold" id="peak-${i}"></div>
+          </div>
         `;
         container.appendChild(div);
-      });
-
-      document.querySelectorAll(".solo").forEach(btn => {
-        btn.addEventListener("click", e => {
-          const i = +e.target.dataset.index;
-          soloStates[i] = !soloStates[i];
-          e.target.classList.toggle("active", soloStates[i]);
-          updateSolo();
-        });
-      });
-
-      document.getElementById("reset").addEventListener("click", () => {
-        soloStates.fill(false);
-        document.querySelectorAll(".solo").forEach(btn => btn.classList.remove("active"));
-        updateSolo();
+        peakHolds[i] = 0;
       });
     }
 
-    function updateSolo() {
-      const anySolo = soloStates.includes(true);
-      gains.forEach((gain, i) => {
-        const active = anySolo ? soloStates[i] : true;
-        gain.gain.value = active ? 1 : 0;
-        document.getElementById(`status-${i}`).textContent = active ? "🟢" : "🔇";
+    function updateMeters() {
+      analysers.forEach((analyser, i) => {
+        const data = new Uint8Array(analyser.frequencyBinCount);
+        analyser.getByteFrequencyData(data);
+        const peak = Math.max(...data);
+        const percent = peak / 255;
+        const dB = 20 * Math.log10(percent || 0.0001);
+        const fill = document.getElementById(`fill-${i}`);
+        const peakBar = document.getElementById(`peak-${i}`);
+
+        fill.style.width = `${percent * 100}%`;
+
+        if (dB > peakHolds[i]) {
+          peakHolds[i] = dB;
+        } else {
+          peakHolds[i] -= 0.5; // decay
+        }
+
+        const peakPercent = Math.pow(10, peakHolds[i] / 20);
+        peakBar.style.left = `${Math.min(peakPercent * 100, 100)}%`;
       });
+
+      updatePlayhead();
+      requestAnimationFrame(updateMeters);
     }
 
     function updatePlayhead() {
       if (!startTime) return;
       const elapsed = ctx.currentTime - startTime;
       document.getElementById("playhead").textContent = `Playhead: ${elapsed.toFixed(2)}s`;
-      requestAnimationFrame(updatePlayhead);
     }
 
     async function playAll() {
       await loadFiles();
       createUI();
       startTime = ctx.currentTime + 0.5;
+
       buffers.forEach((buf, i) => {
         const src = ctx.createBufferSource();
         src.buffer = buf;
         const gain = ctx.createGain();
-        gain.gain.value = 0;
-        src.connect(gain).connect(ctx.destination);
+        const analyser = ctx.createAnalyser();
+        analyser.fftSize = 256;
+
+        src.connect(gain).connect(analyser).connect(ctx.destination);
         src.start(startTime);
-        sources.push(src);
-        gains.push(gain);
+
+        sources[i] = src;
+        gains[i] = gain;
+        analysers[i] = analyser;
       });
-      updateSolo();
-      updatePlayhead();
+
+      updateMeters();
+    }
+
+    function stopAll() {
+      sources.forEach(src => {
+        try { src.stop(); } catch {}
+      });
+      sources = [];
+      startTime = null;
+    }
+
+    function muteAll() {
+      gains.forEach(g => g.gain.value = 0);
+      isMuted = true;
+    }
+
+    function unmuteAll() {
+      gains.forEach(g => g.gain.value = 1);
+      isMuted = false;
     }
 
     document.getElementById("play").addEventListener("click", playAll);
+    document.getElementById("stop").addEventListener("click", stopAll);
+    document.getElementById("mute").addEventListener("click", muteAll);
+    document.getElementById("unmute").addEventListener("click", unmuteAll);
   </script>
 </body>
 </html>
