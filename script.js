@@ -68,7 +68,7 @@ async function loadFiles() {
   }
 });
 
-  }
+  
 
   duration = Math.max(...buffers.map(b => b.duration));
   document.getElementById("sliderA").max = duration.toFixed(1);
