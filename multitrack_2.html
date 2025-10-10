@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Multitrack Player</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f4f4f4;
+      padding: 20px;
+    }
+    button {
+      margin: 5px;
+      padding: 8px 12px;
+      font-size: 14px;
+    }
+    .track {
+      background: #fff;
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .solo.active {
+      background-color: #4caf50;
+      color: white;
+    }
+    .status {
+      font-size: 18px;
+      margin-left: 10px;
+    }
+    #playhead {
+      margin: 10px 0;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h2>Multitrack Player – Microphone Patterns</h2>
+  <button id="play">Play All</button>
+  <button id="reset">Reset Solo</button>
+  <div id="playhead">Playhead: 0.00s</div>
+  <div id="mixer"></div>
+
+  <script>
+    const audioFiles = [
+      {
+        name: "Omnidirectional",
+        url: "https://hfkbremen-my.sharepoint.com/my?id=%2Fpersonal%2Fj%5Fboehm%5Fhfk%2Dbremen%5Fde%2FDocuments%2Fbackup%2FVolumes%2Fs%2FUsers%2Fjukka%2FDocuments%2FAudio%20Programm%2F251010%20Mikrofon%20Polarpattern&viewid=96454d13%2D4c4d%2D416d%2D90ed%2D264fee41297e"
+      },
+      {
+        name: "Cardioid",
+        url: "https://hfkbremen-my.sharepoint.com/:u:/g/personal/j_boehm_hfk-bremen_de/EaQMgTs_I69GtYgyjgF24GYBWnBUSFDb163Er0kxJeqw7w?e=CZfT7y"
+      },
+      {
+        name: "Figure-8",
+        url: "https://hfkbremen-my.sharepoint.com/:u:/g/personal/j_boehm_hfk-bremen_de/ESNpatbpOvhPvHSImn1BKE8BvSpNoot8vSqqE-DNSpfwcw?e=rAxLbn"
+      },
+      {
+        name: "Supercardioid",
+        url: "https://hfkbremen-my.sharepoint.com/:u:/g/personal/j_boehm_hfk-bremen_de/EV8bo91F7eBGtLblmIGqELEB6JpWa28flNi8bXWHDkiydw?e=I1go2W"
+      },
+      {
+        name: "Hypercardioid",
+        url: "https://hfkbremen-my.sharepoint.com/:u:/g/personal/j_boehm_hfk-bremen_de/EUaG1uTDBZdApphT_YwvM0ABn-B6KKGLNuqxSvBhWPLGLQ?e=zsrorL"
+      }
+    ];
+
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    let buffers = [], sources = [], gains = [], soloStates = new Array(audioFiles.length).fill(false);
+    let startTime = null;
+
+    async function loadFiles() {
+      for (let track of audioFiles) {
+        const response = await fetch(track.url);
+        const arrayBuffer = await response.arrayBuffer();
+        const audioBuffer = await ctx.decodeAudioData(arrayBuffer);
+        buffers.push(audioBuffer);
+      }
+    }
+
+    function createUI() {
+      const container = document.getElementById("mixer");
+      container.innerHTML = "";
+      audioFiles.forEach((track, i) => {
+        const div = document.createElement("div");
+        div.className = "track";
+        div.innerHTML = `
+          <strong>${track.name}</strong>
+          <button data-index="${i}" class="solo">Solo</button>
+          <span class="status" id="status-${i}">🔇</span>
+        `;
+        container.appendChild(div);
+      });
+
+      document.querySelectorAll(".solo").forEach(btn => {
+        btn.addEventListener("click", e => {
+          const i = +e.target.dataset.index;
+          soloStates[i] = !soloStates[i];
+          e.target.classList.toggle("active", soloStates[i]);
+          updateSolo();
+        });
+      });
+
+      document.getElementById("reset").addEventListener("click", () => {
+        soloStates.fill(false);
+        document.querySelectorAll(".solo").forEach(btn => btn.classList.remove("active"));
+        updateSolo();
+      });
+    }
+
+    function updateSolo() {
+      const anySolo = soloStates.includes(true);
+      gains.forEach((gain, i) => {
+        const active = anySolo ? soloStates[i] : false;
+        gain.gain.value = active ? 1 : 0;
+        document.getElementById(`status-${i}`).textContent = active ? "🟢" : "🔇";
+      });
+    }
+
+    function updatePlayhead() {
+      if (!startTime) return;
+      const elapsed = ctx.currentTime - startTime;
+      document.getElementById("playhead").textContent = `Playhead: ${elapsed.toFixed(2)}s`;
+      requestAnimationFrame(updatePlayhead);
+    }
+
+    async function playAll() {
+      await loadFiles();
+      createUI();
+      startTime = ctx.currentTime + 0.5;
+
+      buffers.forEach((buf, i) => {
+        const src = ctx.createBufferSource();
+        src.buffer = buf;
+        const gain = ctx.createGain();
+        gain.gain.value = 0; // start muted
+        src.connect(gain).connect(ctx.destination);
+        src.start(startTime);
+        sources.push(src);
+        gains.push(gain);
+      });
+
+      updateSolo();
+      updatePlayhead();
+    }
+
+    document.getElementById("play").addEventListener("click", playAll);
+  </script>
+</body>
+</html>
