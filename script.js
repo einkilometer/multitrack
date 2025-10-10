@@ -71,6 +71,13 @@ async function loadFiles() {
   
 
   duration = Math.max(...buffers.map(b => b.duration));
+document.getElementById("playheadSlider").max = duration.toFixed(2);
+document.getElementById("playheadSlider").oninput = e => {
+  const newTime = parseFloat(e.target.value);
+  stopAll();
+  playFrom(newTime);
+};
+
   document.getElementById("sliderA").max = duration.toFixed(1);
   document.getElementById("sliderB").max = duration.toFixed(1);
   document.getElementById("sliderB").value = duration.toFixed(1);
@@ -78,7 +85,7 @@ async function loadFiles() {
 
   loadingDisplay.textContent = `✅ All ${loadedCount} files loaded`;
   createUI();
-    drawAmplitude();
+   // drawAmplitude();
 }
 
 function createUI() {
@@ -171,13 +178,15 @@ function updateMeters() {
 function updatePlayhead() {
   if (!startTime) return;
   const elapsed = ctx.currentTime - startTime;
+    const elapsed = ctx.currentTime - startTime;
+  document.getElementById("playheadSlider").value = elapsed.toFixed(2);
   document.getElementById("playhead").textContent = `Playhead: ${elapsed.toFixed(2)}s`;
 
-  const playheadLine = document.getElementById("playhead-line");
+  //const playheadLine = document.getElementById("playhead-line");
   const canvas = document.getElementById("amplitudeGraph");
   const percent = elapsed / duration;
   const canvasWidth = canvas.width || canvas.getBoundingClientRect().width;
-  playheadLine.style.left = `${percent * canvas.width}px`;
+  //playheadLine.style.left = `${percent * canvas.width}px`;
 
   if (elapsed >= loopEnd && !isLooping) {
     isLooping = true;
