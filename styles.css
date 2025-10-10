@@ -60,7 +60,7 @@ button {
 #amplitudeGraph {
   display: block;
   background: #222;
-  width: 800px;
+  width: 100%;
 }
 #playhead-line {
   position: absolute;
