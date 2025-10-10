@@ -27,6 +27,8 @@
 const ctx = new (window.AudioContext || window.webkitAudioContext)();
 let buffers = [], sources = [], gains = [], analysers = [], peakHolds = [], soloStates = [], startTime = null;
 let isMuted = true, duration = 60, loopStart = 0, loopEnd = 60;
+let isLooping = false;
+
 
 document.getElementById("sliderA").oninput = e => {
   loopStart = parseFloat(e.target.value);
@@ -145,11 +147,16 @@ function updatePlayhead() {
   const percent = elapsed / duration;
   playheadLine.style.left = `${percent * canvas.width}px`;
 
-  if (elapsed >= loopEnd) {
+  if (elapsed >= loopEnd && !isLooping) {
+    isLooping = true;
     stopAll();
-    playFrom(loopStart);
+    setTimeout(() => {
+      playFrom(loopStart);
+      isLooping = false;
+    }, 100); // small delay to ensure stopAll completes
   }
 }
+
 
 function playFrom(offset) {
   startTime = ctx.currentTime - offset;
