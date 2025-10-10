@@ -51,18 +51,23 @@ async function loadFiles() {
   buffers = [];
   let loadedCount = 0;
 
-  for (let track of audioFiles) {
-    try {
-      const response = await fetch(track.url);
-      const arrayBuffer = await response.arrayBuffer();
-      const audioBuffer = await ctx.decodeAudioData(arrayBuffer);
-      buffers.push(audioBuffer);
-      loadedCount++;
-      loadingDisplay.textContent = `Loading: ${loadedCount} / ${audioFiles.length} files`;
-    } catch (err) {
-      loadingDisplay.textContent = `❌ Error loading: ${track.name}`;
-      console.error(`Failed to load ${track.name}`, err);
-    }
+  audioFiles.forEach(async (track, i) => {
+  try {
+    const response = await fetch(track.url);
+    const arrayBuffer = await response.arrayBuffer();
+    const audioBuffer = await ctx.decodeAudioData(arrayBuffer);
+
+    buffers[i] = audioBuffer;
+    if (!gains[i]) gains[i] = ctx.createGain();
+
+    loadedCount++;
+    document.getElementById("loading").textContent = `Loading: ${loadedCount} / ${audioFiles.length} files`;
+  } catch (err) {
+    document.getElementById("loading").textContent = `❌ Error loading: ${track.name}`;
+    console.error(`Failed to load ${track.name}`, err);
+  }
+});
+
   }
 
   duration = Math.max(...buffers.map(b => b.duration));
@@ -167,20 +172,21 @@ function playFrom(offset) {
   startTime = ctx.currentTime - offset;
   sources = []; gains = []; analysers = [];
 
-  buffers.forEach((buf, i) => {
-    const src = ctx.createBufferSource();
-    src.buffer = buf;
-    const gain = ctx.createGain();
-    const analyser = ctx.createAnalyser();
-    analyser.fftSize = 256;
+buffers.forEach((buf, i) => {
+  const src = ctx.createBufferSource();
+  src.buffer = buf;
+    
+  if (!gains[i]) gains[i] = ctx.createGain(); 
+  const analyser = ctx.createAnalyser();
+  analyser.fftSize = 256;
 
-    src.connect(gain).connect(analyser).connect(ctx.destination);
-    src.start(0, offset);
+  src.connect(gains[i]).connect(analyser).connect(ctx.destination);
+  src.start(0, offset);
 
-    sources[i] = src;
-    gains[i] = gain;
-    analysers[i] = analyser;
-  });
+  sources[i] = src;
+  analysers[i] = analyser;
+});
+
 
   updateSolo();
   updateMeters();
