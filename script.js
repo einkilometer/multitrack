@@ -26,7 +26,7 @@
     ];
 const ctx = new (window.AudioContext || window.webkitAudioContext)();
 let buffers = [], sources = [], gains = [], analysers = [], peakHolds = [], soloStates = [], startTime = null;
-let isMuted = false, duration = 60, loopStart = 0, loopEnd = 60;
+let isMuted = true, duration = 60, loopStart = 0, loopEnd = 60;
 
 document.getElementById("sliderA").oninput = e => {
   loopStart = parseFloat(e.target.value);
@@ -38,7 +38,7 @@ document.getElementById("sliderB").oninput = e => {
 };
 
 document.getElementById("load").addEventListener("click", loadFiles);
-document.getElementById("play").addEventListener("click", () => playFrom(0));
+document.getElementById("play").addEventListener("click", () => playFrom(loopStart));
 document.getElementById("stop").addEventListener("click", stopAll);
 document.getElementById("mute").addEventListener("click", () => { isMuted = true; updateSolo(); });
 document.getElementById("unmute").addEventListener("click", () => { isMuted = false; updateSolo(); });
@@ -184,7 +184,7 @@ async function playAll() {
     document.getElementById("sliderB").value = duration.toFixed(1);
     loopEnd = duration;
   }
-  playFrom(0);
+  playFrom(loopStart);
 }
 function stopAll() { sources.forEach(src => { try { src.stop(); } catch {} }); 
 sources = []; 
