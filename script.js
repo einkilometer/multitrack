@@ -193,6 +193,10 @@ function updatePlayhead() {
 
 
 function playFrom(offset) {
+    if (!isFinite(offset)) {
+  console.warn("Invalid offset:", offset);
+  return;
+}
   if (isPlaying) return;
   isPlaying = true;
   startTime = ctx.currentTime - offset;
