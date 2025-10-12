@@ -96,7 +96,7 @@ function createUI() {
     div.className = "track";
     div.innerHTML = `
       <div class="track-name">${track.name}</div>
-      <button onclick="jumpTo(${track.sec})"><Jump</button>
+      <button onclick="jumpTo(${track.sec})">Jump</button>
       <button class="solo-btn" data-index="${i}">Solo</button>
       <div class="meter" id="meter-${i}">
         <div class="meter-fill" id="fill-${i}"></div>
