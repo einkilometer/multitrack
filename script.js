@@ -11,18 +11,18 @@
       { name: "10-zoom H4 Cardioid Right of XY Stereo pair", url: "10-zoom H4 Kanäle Richtwirkung.mp3" },
       { name: "11-250925 LS-100 Cardioid Left of XY Stereo pair", url: "11-250925 LS-100 Kanäle Richtwirkung.mp3" },
       { name: "12-250925 LS-100 Cardioid Right of XY Stereo pair", url: "12-250925 LS-100 Kanäle Richtwirkung.mp3" },
-      { name: "13-Sennheiser Stereo MS Shotgun Mid Richtwirkung Sounddevices 702 CF T09", url: "13-Sennheiser Stereo MS Shotgun Kanäle Richtwirkung Sounddevices 702 CF T09.mp3" },
-      { name: "14-Sennheiser Stereo MS Shotgun Side Richtwirkung Sounddevices 702 CF T09", url: "14-Sennheiser Stereo MS Shotgun Kanäle Richtwirkung Sounddevices 702 CF T09.mp3" },
-      { name: "15-Ambeo FLU Sennheiser Kanäle Richtwirkung MixPre-002 3", url: "15-Ambeo FLU Sennheiser Kanäle Richtwirkung MixPre-002 3.mp3" },
-      { name: "16-Ambeo FRD Sennheiser Kanäle Richtwirkung MixPre-002 4", url: "16-Ambeo FRD Sennheiser Kanäle Richtwirkung MixPre-002 4.mp3" },
-      { name: "17-Ambeo BLD Sennheiser Kanäle Richtwirkung MixPre-002 5", url: "17-Ambeo BLD Sennheiser Kanäle Richtwirkung MixPre-002 5.mp3" },
-      { name: "18-Ambeo BRU Sennheiser Kanäle Richtwirkung MixPre-002 6", url: "18-Ambeo BRU Sennheiser Kanäle Richtwirkung MixPre-002 6.mp3" },
-      { name: "19-tascam DR-40X Left Richtwirkung", url: "19-tascam DR-40X Kanäle Richtwirkung.mp3" },
-      { name: "20-tascam DR-40X Right Richtwirkung", url: "20-tascam DR-40X Kanäle Richtwirkung.mp3" },
-      { name: "21-MS zoom H2n Mid Richtwirkung", url: "21-MS zoom H2n Kanäle Richtwirkung.mp3" },
-      { name: "22-MS zoom H2n Side Richtwirkung", url: "22-MS zoom H2n Kanäle Richtwirkung.mp3" },
-      { name: "23-XY zoom H2n Kanäle Richtwirkung", url: "23-XY zoom H2n Kanäle Richtwirkung.mp3" },
-      { name: "24-XY zoom H2n Kanäle Richtwirkung", url: "24-XY zoom H2n Kanäle Richtwirkung.mp3" }
+      { name: "13-Sennheiser MKH 418s Mid of Stereo MS Shotgun with presence lift", url: "13-Sennheiser Stereo MS Shotgun Kanäle Richtwirkung Sounddevices 702 CF T09.mp3" },
+      { name: "14-Sennheiser MKH 418s Side open and spacious", url: "14-Sennheiser Stereo MS Shotgun Kanäle Richtwirkung Sounddevices 702 CF T09.mp3" },
+      { name: "15-Ambeo FLU Sennheiser Omnidirektional Front Left Up", url: "15-Ambeo FLU Sennheiser Kanäle Richtwirkung MixPre-002 3.mp3" },
+      { name: "16-Ambeo FRD Sennheiser Omnidirektional Front Rear Down", url: "16-Ambeo FRD Sennheiser Kanäle Richtwirkung MixPre-002 4.mp3" },
+      { name: "17-Ambeo BLD Sennheiser Omnidirektional Back Left Down", url: "17-Ambeo BLD Sennheiser Kanäle Richtwirkung MixPre-002 5.mp3" },
+      { name: "18-Ambeo BRU Sennheiser Omnidirektional Back Reight Up", url: "18-Ambeo BRU Sennheiser Kanäle Richtwirkung MixPre-002 6.mp3" },
+      { name: "19-tascam DR-40X Left moderate ambient pickup", url: "19-tascam DR-40X Kanäle Richtwirkung.mp3" },
+      { name: "20-tascam DR-40X Right moderate ambient pickup", url: "20-tascam DR-40X Kanäle Richtwirkung.mp3" },
+      { name: "21-MS zoom H2n Mid", url: "21-MS zoom H2n Kanäle Richtwirkung.mp3" },
+      { name: "22-MS zoom H2n Side", url: "22-MS zoom H2n Kanäle Richtwirkung.mp3" },
+      { name: "23-XY zoom H2n Left", url: "23-XY zoom H2n Kanäle Richtwirkung.mp3" },
+      { name: "24-XY zoom H2n Right", url: "24-XY zoom H2n Kanäle Richtwirkung.mp3" }
     ];
 const ctx = new (window.AudioContext || window.webkitAudioContext)();
 let buffers = [], sources = [], gains = [], analysers = [], peakHolds = [], soloStates = [], startTime = null;
