@@ -5,8 +5,8 @@
       { name: "04-4 Sennheiser ME67 Supercardioid Shotgun with narrow pickup angle", url: "04-4 Sennheiser K6 ME67.mp3" },
       { name: "05-5 AKG C1000S in Hypercardioid configuraton adds 3–5 dB lift between 5–9 kHz", url: "05-5 AKG C1000S.mp3" },
       { name: "06-6 T-BONE MB 7 Beta Cardioid dynamic capsule with lift around 12 kHz", url: "06-6 T-BONE MB 7 Beta.mp3" },
-      { name: "07-7 t.bone EM 9600 in Cardioid mode warm Text: Superlux Shotgun Cardioid (left side)", url: "07-7 t.bone EM 9600 in Cardioid mode.mp3" },
-      { name: "08-8 t.bone EM 9600 in Tele mode Text: Superlux Shotgun Tele (right side)", url: "08-8 t.bone EM 9600 in Tele mode.mp3" },
+      { name: "07-7 t.bone EM 9600 in Cardioid mode warm [Text: Superlux Shotgun Cardioid (left side)]", url: "07-7 t.bone EM 9600 in Cardioid mode.mp3" },
+      { name: "08-8 t.bone EM 9600 in Tele mode [Text: Superlux Shotgun Tele (right side)]", url: "08-8 t.bone EM 9600 in Tele mode.mp3" },
       { name: "09-zoom H4 Cardioid Left of XY Stereo pair", url: "09-zoom H4 Kanäle Richtwirkung.mp3" },
       { name: "10-zoom H4 Cardioid Right of XY Stereo pair", url: "10-zoom H4 Kanäle Richtwirkung.mp3" },
       { name: "11-250925 LS-100 Cardioid Left of XY Stereo pair", url: "11-250925 LS-100 Kanäle Richtwirkung.mp3" },
@@ -199,7 +199,11 @@ function updatePlayhead() {
 }
 
 
-
+function jumpTo(seconds) {
+  playheadSlider.value = seconds;
+  stopAll();
+  playFrom(seconds);
+}
 
 function playFrom(offset) {
     if (!isFinite(offset)) {
