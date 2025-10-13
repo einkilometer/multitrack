@@ -26,12 +26,20 @@ const audioFiles = [
       { sec: "200", name: "SE MKH 418s Side open and spacious", url: "14-Sennheiser Stereo MS Shotgun Kanäle Richtwirkung Sounddevices 702 CF T09.mp3" }
 ];
 */
-async function fetchAudioFiles() {
+
+
+async function init() {
   const response = await fetch('audioFiles.json');
   const data = await response.json();
-  return data.audioFiles;
+  const audioFiles = data.audioFiles;
+
+  await loadFiles(audioFiles); // pass the array in
+  setupEventListeners(audioFiles);
 }
-const audioFiles = fetchAudioFiles();
+
+init();
+
+
 
 const ctx = new (window.AudioContext || window.webkitAudioContext)();
 let buffers = [], sources = [], gains = [], analysers = [], peakHolds = [], soloStates = [], startTime = null;
@@ -39,22 +47,23 @@ let isMuted = false, duration = 60, loopStart = 0, loopEnd = 60;
 let isLooping = false;
 let isPlaying = false;
 
-
-document.getElementById("sliderA").oninput = e => {
-  loopStart = parseFloat(e.target.value);
-  if (loopStart >= loopEnd) loopStart = loopEnd - 0.1;
-};
-document.getElementById("sliderB").oninput = e => {
-  loopEnd = parseFloat(e.target.value);
-  if (loopEnd <= loopStart) loopEnd = loopStart + 0.1;
-};
-
-document.getElementById("load").addEventListener("click", loadFiles);
-document.getElementById("play").addEventListener("click", () => playFrom(loopStart));
-document.getElementById("stop").addEventListener("click", stopAll);
-document.getElementById("mute").addEventListener("click", () => { isMuted = true; updateSolo(); });
-document.getElementById("unmute").addEventListener("click", () => { isMuted = false; updateSolo(); });
-
+// Attach event listeners once audioFiles are ready
+function setupEventListeners(audioFiles) {
+      document.getElementById("sliderA").oninput = e => {
+        loopStart = parseFloat(e.target.value);
+        if (loopStart >= loopEnd) loopStart = loopEnd - 0.1;
+      };
+      document.getElementById("sliderB").oninput = e => {
+        loopEnd = parseFloat(e.target.value);
+        if (loopEnd <= loopStart) loopEnd = loopStart + 0.1;
+      };
+      
+      document.getElementById("load").addEventListener("click", loadFiles);
+      document.getElementById("play").addEventListener("click", () => playFrom(loopStart));
+      document.getElementById("stop").addEventListener("click", stopAll);
+      document.getElementById("mute").addEventListener("click", () => { isMuted = true; updateSolo(); });
+      document.getElementById("unmute").addEventListener("click", () => { isMuted = false; updateSolo(); });
+}
 async function loadFiles() {
   const loadingDisplay = document.getElementById("loading");
   buffers = [];
@@ -76,16 +85,14 @@ async function loadFiles() {
   });
 
   await Promise.all(promises); // ✅ Wait until all are loaded
-
-  
-
+      
   duration = Math.max(...buffers.map(b => b.duration));
-document.getElementById("playheadSlider").max = duration.toFixed(2);
-document.getElementById("playheadSlider").oninput = e => {
-  const newTime = parseFloat(e.target.value);
-  stopAll();
-  playFrom(newTime);
-};
+  document.getElementById("playheadSlider").max = duration.toFixed(2);
+  document.getElementById("playheadSlider").oninput = e => {
+        const newTime = parseFloat(e.target.value);
+        stopAll();
+        playFrom(newTime);
+      };
 
   document.getElementById("sliderA").max = duration.toFixed(1);
   document.getElementById("sliderB").max = duration.toFixed(1);
