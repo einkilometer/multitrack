@@ -45,9 +45,9 @@ https://einkilometer.github.io/multitrack/multitrack_3.html
   
   642  git config --global user.email "???"
   
-  643  mkdir multitrack
+  643  mkdir github
   
-  644  cd multitrack
+  644  cd github
   
   645  git init
   
