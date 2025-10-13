@@ -1,13 +1,17 @@
-async function init() {
+async function fetchAudioFiles() {
   const response = await fetch('audioFiles.json');
   const data = await response.json();
-  const audioFiles = data.audioFiles;
+  return data.audioFiles; // ✅ extract the array
+}
 
-  await loadFiles(audioFiles); // pass the array in
+async function init() {
+  const audioFiles = await fetchAudioFiles();
+  await loadFiles(audioFiles); // ✅ pass array into loadFiles
   setupEventListeners(audioFiles);
 }
 
 init();
+
 
 
 
