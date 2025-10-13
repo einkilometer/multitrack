@@ -10,7 +10,6 @@ async function init() {
   setupEventListeners(audioFiles);
 }
 
-init();
 
 
 
@@ -80,6 +79,7 @@ async function loadFiles(audioFiles) {
   // drawAmplitude();
 }
 
+init();
 
 function createUI() {
   const container = document.getElementById("tracks");
