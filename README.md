@@ -20,8 +20,6 @@ This recording session is designed to highlight the characteristics of different
   The jump-button starts playback from a device related position.
   The first recordings are done in distance of half arm length.
   With the Solo-Button you select the microphone you are interested in to listen to.
-  
-  <img width="1062" height="173" alt="image" src="https://github.com/user-attachments/assets/c0b293f4-91ad-409a-b063-dcd23a94e39d" />
 
 - **Solo Playback Required**  
   To compare microphones effectively, play soundfiles **one at a time** using the **Solo** button. Avoid simultaneous playback.
