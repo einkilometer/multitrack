@@ -39,54 +39,54 @@ https://einkilometer.github.io/multitrack/multitrack_3.html
 
 
 
-  640  git
+# How to delete file in gitHub
   
-  641  git config --global user.name "???"
+git config --global user.name "YourUserName"
   
-  642  git config --global user.email "???"
+git config --global user.email "YourE-Mail"
   
-  643  mkdir github
+mkdir github
   
-  644  cd github
+cd github
   
-  645  git init
+git init
   
-  646  git config --global init.defaultBranch main
+git config --global init.defaultBranch main
   
-  647  git branch -m main
+git branch -m main
   
-  648  git clone https://github.com/einkilometer/multitrack.git
+git clone https://github.com/einkilometer/multitrack.git
   
-  649  ls
+ls
   
-  650  cd multitrack
+cd multitrack
   
-  651  ls
+ls
   
-  652  ls -l
+ls -l
   
-  653  rm '07-7  t.bone EM 9600 in Cardioid mode.mp3'
+rm '07-7  t.bone EM 9600 in Cardioid mode.mp3'
   
-  654  rm '08-8  t.bone EM 9600 in Tele mode.mp3'
+rm '08-8  t.bone EM 9600 in Tele mode.mp3'
   
-  655  git add -u
+git add -u
   
-  656  git commit -m "Remove files"
+git commit -m "Remove files"
   
-  657  git push orgin main
+git push orgin main
   
-  658  git remote -v
+git remote -v
   
-  659  git push origin main
+git push origin main
   
-  660  git config --global credential.helper cache
+git config --global credential.helper cache
   
-  661  git config --global credential.helper store
+git config --global credential.helper store
   
-  662  git push origin main
+git push origin main
 
 
-Erstelle ein neues Token unter GitHub Token Settings
+# Erstelle ein neues Token unter GitHub Token Settings
 
 https://github.com/settings/tokens
 
@@ -102,12 +102,12 @@ Right Mouse click, Str+v, Win+V funktioniert  unter WSL nicht für die Passworte
 
 
 
-  664  git push origin main
+git push origin main
   
-  665  git remote set-url origin https://github.com/einkilometer/multitrack.git
+git remote set-url origin https://github.com/einkilometer/multitrack.git
   
-  666  git push -u origin main
+git push -u origin main
   
-  667  history
+history
 
 
