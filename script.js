@@ -6,7 +6,7 @@ async function fetchAudioFiles() {
 
 async function init() {
   const audioFiles = await fetchAudioFiles();
-  await loadFiles(audioFiles); // ✅ pass array into loadFiles
+  //await loadFiles(audioFiles); // ✅ pass array into loadFiles
   setupEventListeners(audioFiles);
 }
 
