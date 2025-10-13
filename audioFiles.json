@@ -1,5 +1,5 @@
 {
-    "audioFiles" = [
+    "audioFiles": [
      
       { sec: "7", name: "Rohde NT1 Cardioid with smooth front capture", url: "01-1 Rohde NT1.mp3" },
       { sec: "12", name: "Austrain Audio OC 818 in figure-eight with attenuation 90° and 270° ", url: "02-2 Austrain Audio OC 818.mp3" },
