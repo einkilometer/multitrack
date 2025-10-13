@@ -1,4 +1,5 @@
-    const audioFiles = [
+/*
+const audioFiles = [
       { sec: "7", name: "Rohde NT1 Cardioid with smooth front capture", url: "01-1 Rohde NT1.mp3" },
       { sec: "12", name: "Austrain Audio OC 818 in figure-eight with attenuation 90° and 270° ", url: "02-2 Austrain Audio OC 818.mp3" },
       { sec: "19", name: "AKG C2000B Cardioid tight front with a lift within 5 kHz and 10 kHz", url: "03-3 AKG C2000B.mp3" },
@@ -22,9 +23,16 @@
       { sec: "196", name: "SE Ambeo BLD Omnidirektional Back Left Down", url: "17-Ambeo BLD Sennheiser Kanäle Richtwirkung MixPre-002 5.mp3" },
       { sec: "196", name: "SE Ambeo BRU Omnidirektional Back Reight Up", url: "18-Ambeo BRU Sennheiser Kanäle Richtwirkung MixPre-002 6.mp3" },
       { sec: "200", name: "SE MKH 418s Mid of Stereo MS Shotgun with presence lift", url: "13-Sennheiser Stereo MS Shotgun Kanäle Richtwirkung Sounddevices 702 CF T09.mp3" },
-      { sec: "200", name: "SE MKH 418s Side open and spacious", url: "14-Sennheiser Stereo MS Shotgun Kanäle Richtwirkung Sounddevices 702 CF T09.mp3" },
-    
-    ];
+      { sec: "200", name: "SE MKH 418s Side open and spacious", url: "14-Sennheiser Stereo MS Shotgun Kanäle Richtwirkung Sounddevices 702 CF T09.mp3" }
+];
+*/
+async function fetchAudioFiles() {
+  const response = await fetch('audioFiles.json');
+  const data = await response.json();
+  return data.audioFiles;
+}
+const audioFiles = fetchAudioFiles();
+
 const ctx = new (window.AudioContext || window.webkitAudioContext)();
 let buffers = [], sources = [], gains = [], analysers = [], peakHolds = [], soloStates = [], startTime = null;
 let isMuted = false, duration = 60, loopStart = 0, loopEnd = 60;
