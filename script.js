@@ -76,13 +76,13 @@ async function loadFiles(audioFiles) {
   loopEnd = duration;
 
   loadingDisplay.textContent = `✅ All ${loadedCount} files loaded`;
-  createUI();
+  createUI(audioFiles);
   // drawAmplitude();
 }
 
 init();
 
-function createUI() {
+function createUI(audioFiles) {
   const container = document.getElementById("tracks");
   container.innerHTML = "";
   audioFiles.forEach((track, i) => {
