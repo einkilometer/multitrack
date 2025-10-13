@@ -1,33 +1,3 @@
-/*
-const audioFiles = [
-      { sec: "7", name: "Rohde NT1 Cardioid with smooth front capture", url: "01-1 Rohde NT1.mp3" },
-      { sec: "12", name: "Austrain Audio OC 818 in figure-eight with attenuation 90° and 270° ", url: "02-2 Austrain Audio OC 818.mp3" },
-      { sec: "19", name: "AKG C2000B Cardioid tight front with a lift within 5 kHz and 10 kHz", url: "03-3 AKG C2000B.mp3" },
-      { sec: "26", name: "Sennheiser ME67 Supercardioid Shotgun with narrow pickup angle", url: "04-4 Sennheiser K6 ME67.mp3" },
-      { sec: "35", name: "AKG C1000S in Hypercardioid configuraton adds 3–5 dB lift between 5–9 kHz", url: "05-5 AKG C1000S.mp3" },
-      { sec: "42", name: "bone MB 7 Beta Cardioid dynamic capsule with lift around 12 kHz", url: "06-6 T-BONE MB 7 Beta.mp3" },
-      { sec: "51", name: "t.bone EM 9600 in Super Cardioid mode warm [spoken text: Superlux Shotgun Cardioid] ~ left side", url: "07-7 t.bone EM 9600 in Cardioid mode.mp3" },
-      { sec: "65", name: "t.bone EM 9600 as Tele -2dB side attenuation [spoken text: Superlux Shotgun Tele] ~ right side", url: "08-8 t.bone EM 9600 in Tele mode.mp3" },
-      { sec: "173", name: "zoom H4 Cardioid Left of XY Stereo pair", url: "09-zoom H4 Kanäle Richtwirkung.mp3" },
-      { sec: "173", name: "zoom H4 Cardioid Right of XY Stereo pair", url: "10-zoom H4 Kanäle Richtwirkung.mp3" },
-      { sec: "179", name: "zoom H2n MS Mid", url: "21-MS zoom H2n Kanäle Richtwirkung.mp3" },
-      { sec: "179", name: "zoom H2n MS Side", url: "22-MS zoom H2n Kanäle Richtwirkung.mp3" },
-      { sec: "179", name: "zoom H2n Left XY ", url: "23-XY zoom H2n Kanäle Richtwirkung.mp3" },
-      { sec: "179", name: "zoom H2n Right XY", url: "24-XY zoom H2n Kanäle Richtwirkung.mp3" },
-      { sec: "183", name: "LS-100 Cardioid Left of XY Stereo pair", url: "11-250925 LS-100 Kanäle Richtwirkung.mp3" },
-      { sec: "183", name: "LS-100 Cardioid Right of XY Stereo pair", url: "12-250925 LS-100 Kanäle Richtwirkung.mp3" },
-      { sec: "188", name: "tascam DR-40X Left moderate ambient pickup", url: "19-tascam DR-40X Kanäle Richtwirkung.mp3" },
-      { sec: "188", name: "tascam DR-40X Right moderate ambient pickup", url: "20-tascam DR-40X Kanäle Richtwirkung.mp3" },
-      { sec: "196", name: "SE Ambeo FLU Omnidirektional Front Left Up", url: "15-Ambeo FLU Sennheiser Kanäle Richtwirkung MixPre-002 3.mp3" },
-      { sec: "196", name: "SE Ambeo FRD Omnidirektional Front Rear Down", url: "16-Ambeo FRD Sennheiser Kanäle Richtwirkung MixPre-002 4.mp3" },
-      { sec: "196", name: "SE Ambeo BLD Omnidirektional Back Left Down", url: "17-Ambeo BLD Sennheiser Kanäle Richtwirkung MixPre-002 5.mp3" },
-      { sec: "196", name: "SE Ambeo BRU Omnidirektional Back Reight Up", url: "18-Ambeo BRU Sennheiser Kanäle Richtwirkung MixPre-002 6.mp3" },
-      { sec: "200", name: "SE MKH 418s Mid of Stereo MS Shotgun with presence lift", url: "13-Sennheiser Stereo MS Shotgun Kanäle Richtwirkung Sounddevices 702 CF T09.mp3" },
-      { sec: "200", name: "SE MKH 418s Side open and spacious", url: "14-Sennheiser Stereo MS Shotgun Kanäle Richtwirkung Sounddevices 702 CF T09.mp3" }
-];
-*/
-
-
 async function init() {
   const response = await fetch('audioFiles.json');
   const data = await response.json();
@@ -64,18 +34,20 @@ function setupEventListeners(audioFiles) {
       document.getElementById("mute").addEventListener("click", () => { isMuted = true; updateSolo(); });
       document.getElementById("unmute").addEventListener("click", () => { isMuted = false; updateSolo(); });
 }
-async function loadFiles() {
+async function loadFiles(audioFiles) {
   const loadingDisplay = document.getElementById("loading");
   buffers = [];
   let loadedCount = 0;
 
- const promises = audioFiles.map(async (track, i) => {
+  const promises = audioFiles.map(async (track, i) => {
     try {
       const response = await fetch(track.url);
       const arrayBuffer = await response.arrayBuffer();
       const audioBuffer = await ctx.decodeAudioData(arrayBuffer);
       buffers[i] = audioBuffer;
+
       if (!gains[i]) gains[i] = ctx.createGain();
+
       loadedCount++;
       loadingDisplay.textContent = `Loading: ${loadedCount} / ${audioFiles.length} files`;
     } catch (err) {
@@ -85,14 +57,14 @@ async function loadFiles() {
   });
 
   await Promise.all(promises); // ✅ Wait until all are loaded
-      
+
   duration = Math.max(...buffers.map(b => b.duration));
   document.getElementById("playheadSlider").max = duration.toFixed(2);
   document.getElementById("playheadSlider").oninput = e => {
-        const newTime = parseFloat(e.target.value);
-        stopAll();
-        playFrom(newTime);
-      };
+    const newTime = parseFloat(e.target.value);
+    stopAll();
+    playFrom(newTime);
+  };
 
   document.getElementById("sliderA").max = duration.toFixed(1);
   document.getElementById("sliderB").max = duration.toFixed(1);
@@ -101,8 +73,9 @@ async function loadFiles() {
 
   loadingDisplay.textContent = `✅ All ${loadedCount} files loaded`;
   createUI();
-   // drawAmplitude();
+  // drawAmplitude();
 }
+
 
 function createUI() {
   const container = document.getElementById("tracks");
