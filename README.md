@@ -10,9 +10,18 @@ https://einkilometer.github.io/multitrack/multitrack_3.html
 
 .
 
-## 🎧 Microphone Comparison Guide
+## Microphone Comparison
 
 This recording session is designed to highlight the characteristics of different microphones. Each track contains audio captured with a specific microphone.
+  This recording can help to understand the specifics of microphones.
+  To compare the microphones the soundfiles should be played in Solo.
+  The files should not be played back all together.
+  Each track contains the recording with a specific microphone.
+  The jump-button starts playback from a device related position.
+  The first recordings are done in distance of half arm length.
+  With the Solo-Button you select the microphone you are interested in to listen to.
+  
+  <img width="1062" height="173" alt="image" src="https://github.com/user-attachments/assets/c0b293f4-91ad-409a-b063-dcd23a94e39d" />
 
 - **Solo Playback Required**  
   To compare microphones effectively, play soundfiles **one at a time** using the **Solo** button. Avoid simultaneous playback.
