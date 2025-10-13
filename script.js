@@ -31,7 +31,8 @@ function setupEventListeners(audioFiles) {
         if (loopEnd <= loopStart) loopEnd = loopStart + 0.1;
       };
       
-      document.getElementById("load").addEventListener("click", loadFiles);
+      document.getElementById("load").addEventListener("click", () => loadFiles(audioFiles));
+
       document.getElementById("play").addEventListener("click", () => playFrom(loopStart));
       document.getElementById("stop").addEventListener("click", stopAll);
       document.getElementById("mute").addEventListener("click", () => { isMuted = true; updateSolo(); });
