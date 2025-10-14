@@ -6,41 +6,38 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-   <canvas id="amplitudeGraph" width="100%" height="1"></canvas>
-  <div id="controls">
-    <button id="load">Load Soundfiles</button>
-    <button id="play">Start</button>
-    <button id="stop">Stop</button>
-    <button id="mute">Mute All</button>
-    <button id="unmute">Unmute</button>
-    <button onclick="jumpTo(227)">100cm</button>
-    <button onclick="jumpTo(252)">70cm</button>
-    <button onclick="jumpTo(227)">140cm</button>
-  </div>
-  <div id="loop-controls">
-    <label>Start:<br> <input type="range" id="sliderA" min="0" max="60" step="0.1" value="0" style="width: 100%;"></label>
-    <div id="playhead">Playhead: 0.00s</div> <input type="range" id="playheadSlider" min="0" max="60" step="0.01" value="0" style="width: 100%;"><br>
-    <label>Stop:: <input type="range" id="sliderB" min="0" max="60" step="0.1" value="60" style="width: 100%;"></label>
-  </div>
-  <div id="tracks"></div>
-  <div id="loading">[No files loaded]</div>
-  <div class="mic-guide">
-  <h2>Microphone Comparison</h2>
-  <p>This recording session is designed to highlight the characteristics of different microphones. Each track contains audio captured with a specific microphone.</p>
-      This recording can help to understand the specifics of microphones.
-  To compare the microphones the soundfiles should be played in Solo.
-  The files should not be played back all together.
-  Each track contains the recording with a specific microphone.
-  The jump-button starts playback from a device related position.
-  The first recordings are done in distance of half arm length.
-  With the Solo-Button you select the microphone you are interested in to listen to.
-  <ul>
-    <strong>Solo Playback Required:</strong> To compare microphones effectively, play soundfiles <em>one at a time</em> using the <strong>Solo</strong> button. Avoid simultaneous playback.
-    <strong>Jump Buttons:</strong> Use the jump buttons to start playback from predefined positions that correspond to specific microphone distances or setups.
-    <strong>Recording Setup:</strong> Initial recordings were made at approximately <em>half arm’s length</em> from the source.
-    <strong>How to Listen:</strong> Select the microphone you're interested in by clicking its <strong>Solo</strong> button. This isolates the track for focused listening and comparison.
-  </ul>
+<p>&nbsp;</p>
+<p>Multitrack Monitor<canvas id="amplitudeGraph" width="100%" height="1"></canvas></p>
+<div id="controls">
+  <button id="load">Load Soundfiles</button> 
+  <button id="play">Start</button>
+  <button id="stop">Stop</button> 
+  <button id="mute">Mute All</button> 
+  <button id="unmute">Unmute</button> 
+  <button>100cm</button> 
+  <button>70cm</button> 
+  <button>140cm</button>
 </div>
+
+<div id="loop-controls"><label>Start:<br /> <input id="sliderA" style="width: 100%;" max="60" min="0" step="0.1" type="range" value="0" /></label>
+<div id="playhead">Playhead: 0.00s</div>
+<input id="playheadSlider" style="width: 100%;" max="60" min="0" step="0.01" type="range" value="0" /><br /> <label>Stop:: <input id="sliderB" style="width: 100%;" max="60" min="0" step="0.1" type="range" value="60" /></label></div>
+
+<div id="tracks">&nbsp;</div>
+<div id="loading">[No files loaded]</div>
+<div class="mic-guide">
+<h2>Microphone Comparison</h2>
+<p>This recording session is designed to highlight the characteristics of different microphones. Each track contains audio captured with a specific microphone.</p>
+This recording can help to understand the specifics of microphones. To compare the microphones the soundfiles should be played in Solo. The files should not be played back all together. Each track contains the recording with a specific microphone. The jump-button starts playback from a device related position. The first recordings are done in distance of half arm length. With the Solo-Button you select the microphone you are interested in to listen to.</div>
+<div class="mic-guide">&nbsp;</div>
+<div class="mic-guide"><strong>Solo Playback Required:&nbsp;<br /></strong>To compare microphones effectively, play soundfiles&nbsp;<em>one at a time&nbsp;</em>using the&nbsp;<strong>Solo&nbsp;</strong>button. Avoid simultaneous playback.</div>
+<div class="mic-guide"><strong><br /></strong><strong>Jump Buttons:&nbsp;</strong></div>
+<div class="mic-guide">Use the jump buttons to start playback from predefined positions that correspond to specific microphone distances or setups.<strong><br /></strong></div>
+<div class="mic-guide">&nbsp;</div>
+<div class="mic-guide"><strong>Recording Setup:</strong></div>
+<div class="mic-guide">Initial recordings were made at approximately&nbsp;<em>half arm&rsquo;s lengt&nbsp;</em>from the source.<em><br /></em></div>
+<div class="mic-guide">&nbsp;</div>
+<div class="mic-guide"><strong>How to Listen:<br /></strong><strong>Jump&nbsp;</strong>to the microphone you're interested in by clicking its&nbsp;<strong>Solo&nbsp;</strong>button. This isolates the track for focused listening and comparison.</div>
 
   <script src="script.js"></script>
 </body>
