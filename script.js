@@ -111,14 +111,14 @@ function createUI(audioFiles) {
     });
   });
 }
-
+/*
 function updateSolo() {
   const anySolo = soloStates.includes(true);
   gains.forEach((gain, i) => {
     const active = anySolo ? soloStates[i] : true;
     gain.gain.value = isMuted ? 0 : (active ? 1 : 0);
   });
-}
+}*/
 function drawAmplitude() {
   const canvas = document.getElementById("amplitudeGraph");
   const ctx2d = canvas.getContext("2d");
